@@ -1,0 +1,52 @@
+################################################################################
+# Demo: modelo 1.2 (texto acuacar) en producción
+################################################################################
+# Se requieren dos archivos de entrada.  
+# Estos son los campos y nombres de variables que se espera recibir en el archivo
+# de entrada de metadatos:
+#
+# Modo	Entrada	code	name	CodigoTipoDocumental	NombreTipoDocumental	
+# CodigoPadre	NombrePadre	CodigoAbuelo	NombreAbuelo	AREA	CodigoSerieDocumental	
+# NombreSerieDocumental	dateCreated	dateModified	author	EN EXPTE?	
+# OrgInteresadaRemitente	OrgInteresadaDestinatario	DependenciaResponsable	
+# NombreFichero	ContentId	MimeType	size	path
+#
+# Estos son los campos y nombres de variables que se espera recibir en el archivo
+# de textos:
+
+# parser   path     text     pages    document code  
+################################################################################
+# PASOS
+################################################################################
+1. Este paso es necesario siempre 
+
+Rscript -e 'renv::restore()'
+
+################################################################################
+2. Este paso es necesario solo si es la primera vez que el modelo de corre en 
+este computador. Es el paso de entrenar el modelo y obtener las métricas relevantes.
+Por tanto, requiere que en el mismo directorio en donde se encuentra el script
+esten los datos en una carpeta así: 
+"datos/ACUACAR_Activo_2020_06_01_A_2021_02_10_V1.xlsx"
+"datos/acuacar.feather"
+
+Rscript modelo_1_2.R
+
+################################################################################
+3. Este paso es necesario solo en las pruebas. Los datos de ejemplo son sustituidos
+por nuevos datos 
+
+Rscript generar_datos_ejemplo_1_2.R 30
+
+################################################################################
+4. Este es el comando principal para correr nuevos datos con el modelo que debe
+ser llamado desde el servicio
+
+Rscript modelo_servido_1_2.R <archivo csv metadatos nuevos datos> 
+<archivo feather nuevos textos> <archivo csv resultados>
+
+Ejemplo:
+
+Rscript modelo_servido_1_2.R muestra_1_2.csv datos/acuacar.feather resultado_mod_1_2.csv
+
+################################################################################
